@@ -61,6 +61,28 @@ dealerHandValue = [];
 playerHandValue = [];
 
 ////////////Functions
+
+function displayWin() {
+  let overlayDiv = document.createElement('div');
+  overlayDiv.setAttribute('id', 'overlay');
+  overlayDiv.setAttribute(
+    'style',
+    'position:absolute; width:100%; height: 250px; background-image: linear-gradient(to right, rgba(255,255,0,0), rgba(255,255,0,1), rgba(255,255,0,0)); top: 200px; text-align: center; font-size: 72px; opacity: 1;'
+  );
+  overlayDiv.textContent = 'You Win! Press deal to play again...';
+  document.body.appendChild(overlayDiv);
+}
+function displayLoss() {
+  var overlayDiv = document.createElement('div');
+  overlayDiv.setAttribute('id', 'overlay');
+  overlayDiv.setAttribute(
+    'style',
+    'position:absolute; width:90%; height: 250px; background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1), rgba(255,0,0,0)); top: 200px; text-align: center; font-size: 72px; opacity: 1;'
+  );
+  overlayDiv.textContent = 'You Lose! Press deal to play again...';
+  document.body.appendChild(overlayDiv);
+}
+
 function shuffleArray(array) {
   for (var i = array.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
@@ -78,25 +100,52 @@ function addingPlayerHitValues() {
   let hitTotal = playerValue + playerHandValue[0];
   playerValue = hitTotal;
 }
+// function checkingForDealtBlackjack() {
+//   if (playerValue == 21) {
+//     displayWin();
+//   }
+// }
+
+function checkValue() {
+  if (playerValue <= 21 && dealerValue <= 21) {
+    if (playerValue > dealerValue) {
+      displayWin();
+    } else if (dealerValue > playerValue) {
+      displayLoss();
+    } else {
+      displayLoss(); //display tie;
+    }
+  } else if (playerValue > 21) {
+    displayLoss();
+  } else if (dealerValue > 21) {
+    displayWin();
+  }
+}
+function gameFinal() {
+  if (true) {
+    checkValue();
+  }
+}
 
 function deal() {
   shuffleArray(deck);
   dealerHandValue = [];
   playerHandValue = [];
+  let dealer1 = document.getElementById('dealer-hand');
+  let player1 = document.getElementById('player-hand');
+  dealer1.innerHTML = '';
+  player1.innerHTML = '';
   let deal1 = document.createElement('IMG');
   deal1.src = deck[0].imageURL;
   deal1.className = 'hand-img';
   dealerHandValue.push(deck[0].value);
   deck.shift();
-
   let deal2 = document.createElement('IMG');
   deal2.src = deck[0].imageURL;
   deal2.className = 'hand-img';
   dealerHandValue.push(deck[0].value);
   deck.shift();
-  let dealer1 = document.getElementById('dealer-hand');
   dealer1.append(deal1, deal2);
-
   let play1 = document.createElement('IMG');
   play1.src = deck[0].imageURL;
   play1.className = 'hand-img';
@@ -107,9 +156,9 @@ function deal() {
   play2.className = 'hand-img';
   playerHandValue.push(deck[0].value);
   deck.shift();
-  let player1 = document.getElementById('player-hand');
   player1.append(play1, play2);
   addingInitialValues();
+  //   checkingForDealtBlackjack();
 }
 
 function hit() {
@@ -122,6 +171,9 @@ function hit() {
   let player1 = document.getElementById('player-hand');
   player1.append(playhit);
   addingPlayerHitValues();
+  //   if (playerValue == 21) {
+  //     //CheckValues
+  //   }
 }
 
 ////// Event Listenters
