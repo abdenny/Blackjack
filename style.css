@@ -75,7 +75,17 @@ button {
   margin-top: 15px;
   width: 10%;
 }
+button:hover {
+  background-color: #ee4608;
+  border-color: #ee4608;
+  border-width: 3px;
+}
 .hand-img {
   height: 110px;
   margin: 10px;
+  transition: all 0.3s linear;
+}
+
+.hand-img:hover {
+  transform: scale(1.2);
 }

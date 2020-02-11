@@ -51,7 +51,8 @@ const deck = [
   { suit: 'Spades', value: 11, imageURL: 'JPEG/AS.jpg' },
   { suit: 'Spades', value: 10, imageURL: 'JPEG/JS.jpg' },
   { suit: 'Spades', value: 10, imageURL: 'JPEG/QS.jpg' },
-  { suit: 'Spades', value: 10, imageURL: 'JPEG/KS.jpg' }
+  { suit: 'Spades', value: 10, imageURL: 'JPEG/KS.jpg' },
+  { suit: 'None', value: 0, imageURL: 'JPEG/Red_back.jpg' }
 ];
 let dealerPoints = document.getElementById('dealer-points');
 let playerPoints = document.getElementById('player-points');
@@ -59,15 +60,15 @@ let playerValueDisplayTotal = document.getElementById('player');
 let dealerValueDisplayTotal = document.getElementById('dealer');
 let dealerValue = 0;
 let playerValue = 0;
-let playerAceCount = 0;
-let dealerAceCount = 0;
-dealerHandValue = [];
-playerHandValue = [];
+let dealerHandValue = [];
+let playerHandValue = [];
+let faceDown = [];
 
 ////////////Functions
-function displayValues() {
-  playerValueDisplayTotal.innerHTML = 'Player: ' + playerValue;
+function revealDealer() {
   dealerValueDisplayTotal.innerHTML = 'Dealer: ' + dealerValue;
+  let dealtFaceDown = document.getElementById('facedown');
+  dealtFaceDown.src = faceDown[0];
 }
 
 function displayWin() {
@@ -123,7 +124,17 @@ function addingPlayerHitValues() {
   }
 }
 
+function addingDealerHitValues() {
+  let dealHitTotal = dealerValue + dealerHandValue[0];
+  dealerValue = dealHitTotal;
+  if (dealerHandValue[0] == 11 && dealerValue >= 11) {
+    dealerValue = dealerValue - 10;
+  }
+}
+
 function checkValue() {
+  revealDealer();
+
   if (playerValue <= 21 && dealerValue <= 21) {
     //dealer method
     if (playerValue > dealerValue) {
@@ -154,49 +165,32 @@ function deal() {
   dealer1.innerHTML = '';
   player1.innerHTML = '';
   let deal1 = document.createElement('IMG');
-  deal1.src = deck[0].imageURL;
+  //   deal1.src = deck[0].imageURL;
   deal1.className = 'hand-img';
-  if (deck[0].value == 11) {
-    dealerHandValue.push(deck[0].value);
-    dealerAceCount++;
-  } else {
-    dealerHandValue.push(deck[0].value);
-  }
+  deal1.id = 'facedown';
+  deal1.src = 'JPEG/Red_back.jpg';
+  faceDown.push(deck[0].imageURL);
+  dealerHandValue.push(deck[0].value);
   deck.shift();
   let deal2 = document.createElement('IMG');
   deal2.src = deck[0].imageURL;
   deal2.className = 'hand-img';
-  if (deck[0].value == 11) {
-    dealerAceCount.push(deck[0].value);
-    aceCount++;
-  } else {
-    dealerHandValue.push(deck[0].value);
-  }
+  dealerHandValue.push(deck[0].value);
   deck.shift();
   dealer1.append(deal1, deal2);
   let play1 = document.createElement('IMG');
   play1.src = deck[0].imageURL;
   play1.className = 'hand-img';
-  if (deck[0].value == 11) {
-    playerHandValue.push(deck[0].value);
-    playerAceCount++;
-  } else {
-    playerHandValue.push(deck[0].value);
-  }
+  playerHandValue.push(deck[0].value);
   deck.shift();
   let play2 = document.createElement('IMG');
   play2.src = deck[0].imageURL;
   play2.className = 'hand-img';
-  if (deck[0].value == 11) {
-    playerHandValue.push(deck[0].value);
-    playerAceCount++;
-  } else {
-    playerHandValue.push(deck[0].value);
-  }
+  playerHandValue.push(deck[0].value);
   deck.shift();
   player1.append(play1, play2);
   addingInitialValues();
-  displayValues();
+  playerValueDisplayTotal.innerHTML = 'Player: ' + playerValue;
 }
 
 function hit() {
@@ -209,32 +203,18 @@ function hit() {
   let player1 = document.getElementById('player-hand');
   player1.append(playhit);
   addingPlayerHitValues();
-  displayValues();
+  playerValueDisplayTotal.innerHTML = 'Player: ' + playerValue;
 }
-// function dealerHit() {
-//   playerHandValue = [];
-//   let playhit = document.createElement('IMG');
-//   playhit.src = deck[0].imageURL;
-//   playhit.className = 'hand-img';
-//   playerHandValue.push(deck[0].value);
-//   deck.shift();
-//   let player1 = document.getElementById('player-hand');
-//   player1.append(playhit);
-//   addingPlayerHitValues();
 
 ////// Event Listenters
 
 document.getElementById('deal-button').addEventListener('click', function(e) {
   deal();
-  console.log(dealerValue);
-  console.log(playerValue);
-  console.log(playerAceCount);
   endGame();
 });
 
 document.getElementById('hit-button').addEventListener('click', function(e) {
   hit();
-  console.log(playerValue);
   endGame();
 });
 
