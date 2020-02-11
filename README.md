@@ -8,7 +8,7 @@ Blackjack is a card game where the player tries to beat the dealer in one of thr
   <li>Reach a final score higher than the dealer without exceeding 21.</li>
   <li>Stand, in hope the dealer busts (draws cards exceeding 21).</li>
 </ol>
-[How to Play](https://www.888casino.com/blog/blackjack-strategy-guide/how-to-play-blackjack)
+<a href="https://www.888casino.com/blog/blackjack-strategy-guide/how-to-play-blackjack">How to Play</a>
 
 <h3>Features</h3>
 <ul>
