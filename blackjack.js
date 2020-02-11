@@ -63,6 +63,8 @@ let playerValue = 0;
 let dealerHandValue = [];
 let playerHandValue = [];
 let faceDown = [];
+let dealerAceCount = 0;
+let victory = '';
 
 ////////////Functions
 function revealDealer() {
@@ -74,33 +76,48 @@ function revealDealer() {
 function displayWin() {
   let overlayDiv = document.createElement('div');
   overlayDiv.setAttribute('id', 'overlay');
+  overlayDiv.setAttribute('class', 'fadeIn');
   overlayDiv.setAttribute(
     'style',
-    'position:absolute; width:100%; height: 250px; background-image: linear-gradient(to right, rgba(255,255,0,0), rgba(255,255,0,1), rgba(255,255,0,0)); top: 200px; text-align: center; font-size: 72px; opacity: 1;'
+    'position:absolute; width:100%; height: 250px; background-image: linear-gradient(to right, rgba(255,255,0,0), rgba(255,255,0,1), rgba(255,255,0,0)); top: 200px; text-align: center; font-size: 72px; opacity: 1; color: #ff0000; text-shadow: 4px 4px #fff;'
   );
-  overlayDiv.textContent = 'You Win! Press deal to play again...';
+  overlayDiv.textContent = `You Won with a score of ${playerValue}!`;
   document.body.appendChild(overlayDiv);
 }
 
 function displayLoss() {
   var overlayDiv = document.createElement('div');
   overlayDiv.setAttribute('id', 'overlay');
+  overlayDiv.setAttribute('class', 'slideLeft');
   overlayDiv.setAttribute(
     'style',
-    'position:absolute; width:90%; height: 250px; background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1), rgba(255,0,0,0)); top: 200px; text-align: center; font-size: 72px; opacity: 1;'
+    'position:absolute; width:100%; height: 250px; background-image: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1), rgba(255,0,0,0)); top: 200px; text-align: center; font-size: 72px; opacity: 1; color: black; text-shadow: 4px 4px #fff;'
   );
-  overlayDiv.textContent = 'You Lose! Press deal to play again...';
+  overlayDiv.textContent = `You lost with a score of ${playerValue}!`;
+  document.body.appendChild(overlayDiv);
+}
+
+function displayBust() {
+  var overlayDiv = document.createElement('div');
+  overlayDiv.setAttribute('id', 'overlay');
+  overlayDiv.setAttribute('class', 'slideLeft');
+  overlayDiv.setAttribute(
+    'style',
+    'position:absolute; width:100%; height: 250px; background-color: red; top: 200px; text-align: center; font-size: 72px; opacity: 1; color: blue; text-shadow: 4px 4px #fff;'
+  );
+  overlayDiv.textContent = `You busted with a score of ${playerValue}!`;
   document.body.appendChild(overlayDiv);
 }
 
 function displayTie() {
   var overlayDiv = document.createElement('div');
   overlayDiv.setAttribute('id', 'overlay');
+  overlayDiv.setAttribute('class', 'fadeIn');
   overlayDiv.setAttribute(
     'style',
-    'position:absolute; width:90%; height: 250px; background-image:  linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%); top: 200px; text-align: center; font-size: 72px; opacity: 1;'
+    'position:absolute; width:100%; height: 250px; background-image:  linear-gradient(to right, rgba(0,0,255,0), rgba(0,0,255,1), rgba(0,255,0,0)); top: 200px; text-align: center; font-size: 72px; opacity: 1; color: #ff0000; text-shadow: 4px 4px #fff;'
   );
-  overlayDiv.textContent = 'You Tie! Press deal to play again...';
+  overlayDiv.textContent = `You Tied with a score of ${playerValue}!`;
   document.body.appendChild(overlayDiv);
 }
 
@@ -134,29 +151,39 @@ function deal() {
   dealer1.innerHTML = '';
   player1.innerHTML = '';
   let deal1 = document.createElement('IMG');
-  deal1.className = 'hand-img';
+  deal1.className = 'hand-img bigEntrance';
   deal1.id = 'facedown';
   deal1.src = 'JPEG/Red_back.jpg';
   faceDown.push(deck[0].imageURL);
+  if (deck[0].value == 11) {
+    dealerAceCount++;
+  }
   dealerHandValue.push(deck[0].value);
   deck.shift();
+
   let deal2 = document.createElement('IMG');
   deal2.src = deck[0].imageURL;
-  deal2.className = 'hand-img';
+  deal2.className = 'hand-img bigEntrance';
+  if (deck[0].value == 11) {
+    dealerAceCount++;
+  }
   dealerHandValue.push(deck[0].value);
   deck.shift();
   dealer1.append(deal1, deal2);
+
   let play1 = document.createElement('IMG');
   play1.src = deck[0].imageURL;
-  play1.className = 'hand-img';
+  play1.className = 'hand-img bigEntrance';
   playerHandValue.push(deck[0].value);
   deck.shift();
+
   let play2 = document.createElement('IMG');
   play2.src = deck[0].imageURL;
-  play2.className = 'hand-img';
+  play2.className = 'hand-img bigEntrance';
   playerHandValue.push(deck[0].value);
   deck.shift();
   player1.append(play1, play2);
+
   addingInitialValues();
   playerValueDisplayTotal.innerHTML = 'Player: ' + playerValue;
 }
@@ -165,7 +192,7 @@ function hit() {
   playerHandValue = [];
   let playhit = document.createElement('IMG');
   playhit.src = deck[0].imageURL;
-  playhit.className = 'hand-img';
+  playhit.className = 'hand-img bigEntrance';
   playerHandValue.push(deck[0].value);
   deck.shift();
   let player1 = document.getElementById('player-hand');
@@ -177,27 +204,26 @@ function hit() {
 function dealerHit() {
   dealerHandValue = [];
   while (dealerValue < 17) {
+    shuffleArray(deck);
     let dealHit = document.createElement('IMG');
     dealHit.src = deck[0].imageURL;
-    dealHit.className = 'hand-img';
+    dealHit.className = 'hand-img bigEntrance';
     dealerHandValue.push(deck[0].value);
-    deck.shift();
     let dealer1 = document.getElementById('dealer-hand');
     dealer1.append(dealHit);
-    let dealHitTotal = dealerValue + dealerHandValue[0];
+    let dealHitTotal = dealerValue + deck[0].value;
     dealerValue = dealHitTotal;
-    // if (dealerHandValue[0] == 11 && dealerValue >= 11) {
-    //   dealerValue = dealerValue - 10;
-    // }
+    if (dealerAceCount >= 1 && deck[0].value == 11) {
+      dealerValue = dealerValue - 10;
+    }
   }
   dealerValueDisplayTotal.innerHTML = 'Dealer: ' + dealerValue;
 }
 
 function checkValue() {
-  revealDealer();
   dealerHit();
+  revealDealer();
   if (playerValue <= 21 && dealerValue <= 21) {
-    //dealer method
     if (playerValue > dealerValue) {
       displayWin();
     } else if (dealerValue > playerValue) {
@@ -206,7 +232,7 @@ function checkValue() {
       displayTie();
     }
   } else if (playerValue > 21) {
-    displayLoss();
+    displayBust();
   } else if (dealerValue > 21) {
     displayWin();
   }
@@ -220,6 +246,7 @@ function endGame() {
 ////// Event Listenters
 
 document.getElementById('deal-button').addEventListener('click', function(e) {
+  console.log(faceDown);
   deal();
   endGame();
 });
