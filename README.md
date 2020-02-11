@@ -15,7 +15,7 @@ Blackjack is a card game where the player tries to beat the dealer in one of thr
   <li>Hit, stand, or deal.</li>
   <li>Cards are removed from the deck once dealt.</li>
   <li>Dealer must stand on 17.</li>
-<li>Accounting for the value of aces in context of the players hand. If the 11 value typically assigned to an ace would bust the player, its value is instead counted as one.</li>
+<li>Accounting for the value of aces in context of the players hand. If the eleven value typically assigned to an ace would bust the player, its value is instead counted as one.</li>
 </ul>
 <h3>Technologies Used</h3>
 <ul>
