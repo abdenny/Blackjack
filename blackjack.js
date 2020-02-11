@@ -81,6 +81,7 @@ function displayWin() {
   overlayDiv.textContent = 'You Win! Press deal to play again...';
   document.body.appendChild(overlayDiv);
 }
+
 function displayLoss() {
   var overlayDiv = document.createElement('div');
   overlayDiv.setAttribute('id', 'overlay');
@@ -124,38 +125,6 @@ function addingPlayerHitValues() {
   }
 }
 
-function addingDealerHitValues() {
-  let dealHitTotal = dealerValue + dealerHandValue[0];
-  dealerValue = dealHitTotal;
-  if (dealerHandValue[0] == 11 && dealerValue >= 11) {
-    dealerValue = dealerValue - 10;
-  }
-}
-
-function checkValue() {
-  revealDealer();
-
-  if (playerValue <= 21 && dealerValue <= 21) {
-    //dealer method
-    if (playerValue > dealerValue) {
-      displayWin();
-    } else if (dealerValue > playerValue) {
-      displayLoss();
-    } else {
-      displayTie();
-    }
-  } else if (playerValue > 21) {
-    displayLoss();
-  } else if (dealerValue > 21) {
-    displayWin();
-  }
-}
-function endGame() {
-  if (playerValue >= 21) {
-    checkValue();
-  }
-}
-
 function deal() {
   shuffleArray(deck);
   dealerHandValue = [];
@@ -165,7 +134,6 @@ function deal() {
   dealer1.innerHTML = '';
   player1.innerHTML = '';
   let deal1 = document.createElement('IMG');
-  //   deal1.src = deck[0].imageURL;
   deal1.className = 'hand-img';
   deal1.id = 'facedown';
   deal1.src = 'JPEG/Red_back.jpg';
@@ -204,6 +172,49 @@ function hit() {
   player1.append(playhit);
   addingPlayerHitValues();
   playerValueDisplayTotal.innerHTML = 'Player: ' + playerValue;
+}
+
+function dealerHit() {
+  dealerHandValue = [];
+  while (dealerValue < 17) {
+    let dealHit = document.createElement('IMG');
+    dealHit.src = deck[0].imageURL;
+    dealHit.className = 'hand-img';
+    dealerHandValue.push(deck[0].value);
+    deck.shift();
+    let dealer1 = document.getElementById('dealer-hand');
+    dealer1.append(dealHit);
+    let dealHitTotal = dealerValue + dealerHandValue[0];
+    dealerValue = dealHitTotal;
+    // if (dealerHandValue[0] == 11 && dealerValue >= 11) {
+    //   dealerValue = dealerValue - 10;
+    // }
+  }
+  dealerValueDisplayTotal.innerHTML = 'Dealer: ' + dealerValue;
+}
+
+function checkValue() {
+  revealDealer();
+  dealerHit();
+  if (playerValue <= 21 && dealerValue <= 21) {
+    //dealer method
+    if (playerValue > dealerValue) {
+      displayWin();
+    } else if (dealerValue > playerValue) {
+      displayLoss();
+    } else {
+      displayTie();
+    }
+  } else if (playerValue > 21) {
+    displayLoss();
+  } else if (dealerValue > 21) {
+    displayWin();
+  }
+}
+function endGame() {
+  if (playerValue >= 21) {
+    checkValue();
+  }
 }
 
 ////// Event Listenters
