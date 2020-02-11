@@ -51,8 +51,7 @@ const deck = [
   { suit: 'Spades', value: 11, imageURL: 'JPEG/AS.jpg' },
   { suit: 'Spades', value: 10, imageURL: 'JPEG/JS.jpg' },
   { suit: 'Spades', value: 10, imageURL: 'JPEG/QS.jpg' },
-  { suit: 'Spades', value: 10, imageURL: 'JPEG/KS.jpg' },
-  { suit: 'None', value: 0, imageURL: 'JPEG/Red_back.jpg' }
+  { suit: 'Spades', value: 10, imageURL: 'JPEG/KS.jpg' }
 ];
 let dealerPoints = document.getElementById('dealer-points');
 let playerPoints = document.getElementById('player-points');
